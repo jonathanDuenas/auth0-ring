@@ -2,6 +2,7 @@
   (:require [auth0-ring.handlers :as auth0]
             [auth0-ring.middleware :refer [wrap-token-verification]]
             [clojure.java.io :as io]
+            [clojure.tools.logging :as log]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.cookies :refer [wrap-cookies]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
@@ -20,7 +21,7 @@
     <title>Login</title>
   </head>
   <body>
-    <script src='https://cdn.auth0.com/js/lock/10.9.1/lock.min.js'></script>
+    <script src='https://cdn.auth0.com/js/lock/11.14/lock.min.js'></script>
     <script>var lock = new Auth0Lock(
 '" (:client-id config) "',
 '" (:domain config) "', {
@@ -55,6 +56,7 @@ lock.show();</script>
     (redirect (str "/login?returnUrl=" (:uri req)))))
 
 (defn index [req]
+  ;;(log/info (:user req))
   (if-let [user (:user req)]
     {:status 200
      :headers {"Content-Type" "text/html"}
@@ -65,7 +67,7 @@ lock.show();</script>
   </head>
   <body>
     <h1>Welcome dear user!</h1>
-    <p>Nice to see you, " (:nickname user) "</p>
+    <p>Nice to see you, " (:email user) "</p>
     <p><a href=\"/logout\">Log out</a></p>
   </body>
 </html>")}
@@ -83,7 +85,7 @@ lock.show();</script>
 </html>")}))
 
 (defn web-handler [req]
-  (let [callback-handler (auth0/create-callback-handler config)
+  (let [callback-handler (auth0/create-callback-handler config {:on-authenticated nil})
         logout-callback-handler (auth0/create-logout-callback-handler config)
         logout-handler (auth0/create-logout-handler config)
         login-handler (auth0/wrap-login-handler login)]
@@ -97,9 +99,9 @@ lock.show();</script>
       "/favicon.ico" {:status 404})))
 
 (def handler (-> #'web-handler
-                 (wrap-resource "public")
-                 wrap-content-type
-                 wrap-not-modified
-                 (wrap-token-verification config)
-                 wrap-params
-                 wrap-cookies))
+                (wrap-resource "public")
+                wrap-content-type
+                wrap-not-modified
+                (wrap-token-verification config)
+                wrap-params
+                wrap-cookies))

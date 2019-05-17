@@ -1,8 +1,9 @@
-{:domain "yourapp.auth0.com"
- :issuer "https://yourapp.auth0.com/"
- :client-id "client id"
- :signing-algorithm :hs256
- :client-secret "client secret"
+{:domain "YOUR_DOMAIN"
+ :issuer "https://YOUR_DOMAIN/"
+ :client-id "CLIENT_ID"
+ :signing-algorithm :rs256
+ :client-secret "CLIENT_SECRET"
+ :base "http://localhost:3000"
  :scope "openid user_id name nickname email picture"
  :callback-path "/auth/callback"
  :error-redirect "/login"

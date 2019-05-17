@@ -6,7 +6,7 @@
 
 (defn start []
   (when-not server
-    (def server (run-jetty #'app/handler {:port 3666 :join? false}))))
+    (def server (run-jetty #'app/handler {:port 3000 :join? false}))))
 
 (defn stop []
   (when server
