@@ -11,7 +11,7 @@ manner (e.g. no sessions).
 Add to `:dependencies` in your project.clj:
 
 ```clj
-[auth0-ring "0.4.4"]
+[org.clojars.jduenas/auth0-ring "0.4.6"]
 ```
 
 ## Prerequisites
@@ -57,6 +57,7 @@ configuration:
  :client-id "client id"
  :signing-algorithm :hs256
  :client-secret "client secret"
+ :base "http://localhost:3000/"
  :scope "openid user_id name nickname email picture"
  :callback-path "/auth/callback"
  :error-redirect "/login"
@@ -66,6 +67,8 @@ configuration:
 ```
 
 To run the provided sample code, put this in `resources/config.edn`.
+
+You can see an example of this file in `resources-dev/.example.config.edn`.
 
 ### The login page
 
