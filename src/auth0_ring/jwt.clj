@@ -30,4 +30,4 @@
       verified-payload
       (catch RuntimeException e
         (.printStackTrace e)
-        "Error"))))
+        false))))

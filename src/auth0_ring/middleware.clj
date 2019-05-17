@@ -10,12 +10,16 @@
           access-token (get-in req [:cookies "access-token" :value])]
       (if id-token
         (try
-          (if-let [user (verify-token config id-token)]
-            (handler (assoc req :user (json/read-str user :key-fn keyword)))
-            (update-in (handler req) [:cookies] #(merge {"id-token" (delete-cookie req)
-                                                         "access-token" (delete-cookie req)} %)))
-          (catch RuntimeException e
-;;            (.printStackTrace e)
+          (do
+            (def user (verify-token config id-token))
+            (if user
+              (handler (assoc req :user (json/read-str user :key-fn keyword)))
+              (update-in (handler req) [:cookies] #(merge {"id-token" (delete-cookie req)
+                                                           "access-token" (delete-cookie req)} %))
+              )
+            )
+          (catch Exception e
+            (.printStackTrace e)
             (update-in (handler req) [:cookies] #(merge {"id-token" (delete-cookie req)
                                                          "access-token" (delete-cookie req)} %))
             )
