@@ -21,7 +21,8 @@
 
 (defn verify-token [config token]
   (let [jwt (JWT/decode token)
-        provider (new UrlJwkProvider (str "https://" (:domain config) "/.well-known/jwks.json"))
+        ;;provider (new UrlJwkProvider (str "https://" (:domain config) "/.well-known/jwks.json"))
+        provider (:provider config)
         public-key (.getPublicKey (.get provider (.getKeyId jwt)))
         algorithm (Algorithm/RSA256 public-key)]
     (try

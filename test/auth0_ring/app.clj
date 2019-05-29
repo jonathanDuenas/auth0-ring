@@ -8,9 +8,12 @@
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
-            [ring.util.response :refer [redirect]]))
+            [ring.util.response :refer [redirect]])
+  (:import [com.auth0.jwk GuavaCachedJwkProvider UrlJwkProvider]))
 
-(def config (read-string (slurp (io/resource "config.edn"))))
+(def config (assoc (read-string (slurp (io/resource "config.edn")))
+                   :provider (new GuavaCachedJwkProvider (new UrlJwkProvider (str "https://" (:domain (read-string (slurp (io/resource "config.edn")))) "/.well-known/jwks.json")))
+                   ))
 
 (defn login [req]
   {:status 200

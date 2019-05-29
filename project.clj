@@ -1,4 +1,4 @@
-(defproject org.clojars.jduenas/auth0-ring "0.4.6"
+(defproject org.clojars.jduenas/auth0-ring "0.4.6-2"
   :description "Auth0 integration from Clojure"
   :url "http://github.com/jonathanDuenas/auth0-ring"
   :license {:name "BSD-3-Clause"

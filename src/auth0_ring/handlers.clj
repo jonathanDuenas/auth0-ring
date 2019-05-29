@@ -61,15 +61,14 @@
         client-secret (:client-secret config)
         redirect-uri (str (:base config) (:callback-path config))]
     (def tokens
-      (json/read-str (:body (http/post (str "https://" (:domain config) "/oauth/token")
-                                       {:headers {"content-type" "application/x-www-form-urlencoded"}
-                                        :form-params {:grant_type "authorization_code"
-                                                      :client_id client-id
-                                                      :client_secret client-secret
-                                                      :code code
-                                                      :redirect_uri redirect-uri}}))
-                     :key-fn keyword))
-    tokens))
+      (:body (http/post (str "https://" (:domain config) "/oauth/token")
+                        {:headers {"content-type" "application/x-www-form-urlencoded"}
+                         :form-params {:grant_type "authorization_code"
+                                       :client_id client-id
+                                       :client_secret client-secret
+                                       :code code
+                                       :redirect_uri redirect-uri}})))
+    (json/read-str tokens :key-fn keyword)))
 
 (defn create-callback-handler [config & [{:keys [on-authenticated cookie-opts]
                                           :or {cookie-opts {}}}]]

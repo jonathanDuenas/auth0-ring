@@ -2,6 +2,7 @@
   (:require [auth0-ring.core :refer [delete-cookie]]
             [auth0-ring.jwt :refer [verify-token]]
             [clojure.data.json :as json]
+            [clojure.tools.logging :as log]
             [clojure.walk :refer [keywordize-keys]]))
 
 (defn wrap-token-verification [handler config]
