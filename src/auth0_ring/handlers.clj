@@ -60,6 +60,7 @@
         client-id (:client-id config)
         client-secret (:client-secret config)
         redirect-uri (str (:base config) (:callback-path config))]
+    (log/info "TOKEN EXCHANGE" code config)
     (def tokens
       (:body (http/post (str "https://" (:domain config) "/oauth/token")
                         {:headers {"content-type" "application/x-www-form-urlencoded"}
